@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Pika | Оазис в Аризоне</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
+        /* === БАЗОВЫЕ НАСТРОЙКИ === */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdfbf7;
+            color: #2d3436;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* === ЦВЕТА И ЭФФЕКТЫ === */
+        :root {
+            --ocean: #0984e3;
+            --sand: #fbc531;
+            --jungle: #00b894;
+            --night: #2d3436;
+            --glow: 0 0 15px rgba(0, 184, 148, 0.6);
+            --glow-ocean: 0 0 20px rgba(9, 132, 227, 0.5);
+        }
+
+        /* === НАВИГАЦИЯ === */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 50px; background: rgba(253, 251, 247, 0.95);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); backdrop-filter: blur(10px);
+        }
+        .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; box-shadow: var(--glow-ocean); }
+        .logo-text { font-size: 24px; font-weight: 800; color: var(--ocean); text-transform: uppercase; letter-spacing: 2px; }
+        .nav-links a { margin-left: 25px; text-decoration: none; color: var(--night); font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--jungle); }
+        .btn-social { background: var(--ocean); color: white !important; padding: 10px 20px; border-radius: 25px; }
+        .btn-social:hover { background: #076ab6; box-shadow: var(--glow-ocean); }
+
+        /* === ГЛАВНЫЙ ЭКРАН (HERO) === */
+        /* Здесь используется живописный фон океана 1000027468.jpg */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            background: linear-gradient(135deg, rgba(0,184,148,0.7) 0%, rgba(251,197,49,0.7) 50%, rgba(9,132,227,0.7) 100%), url('1000027468.jpg') center/cover no-repeat;
+            color: white; padding: 0 20px;
+        }
+        .hero h1 { font-size: 5rem; margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.4); }
+        .hero p { font-size: 1.5rem; max-width: 800px; margin-bottom: 30px; text-shadow: 1px 2px 10px rgba(0,0,0,0.4); }
+        .anthem-btn {
+            background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 15px 30px;
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); font-weight: 600;
+        }
+        .anthem-btn:hover { background: white; color: var(--ocean); box-shadow: var(--glow-ocean); transform: translateY(-3px); }
+
+        /* === СЕКЦИИ ОБЩЕЕ === */
+        section { padding: 100px 10%; }
+        .section-title { text-align: center; font-size: 2.8rem; margin-bottom: 20px; color: var(--ocean); text-transform: uppercase; }
+        .section-subtitle { text-align: center; font-size: 1.2rem; color: #636e72; margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto; }
+
+        /* === О НАС И ЛОКАЦИИ === */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .about-text { font-size: 1.1rem; border-left: 5px solid var(--sand); padding-left: 20px; margin-bottom: 20px; }
+        .locations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+        .loc-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; background: white; }
+        .loc-card:hover { transform: translateY(-10px); }
+        .loc-card img { width: 100%; height: 220px; object-fit: cover; }
+        .loc-info { padding: 20px; }
+        .loc-info h3 { color: var(--jungle); margin-bottom: 10px; }
+
+        /* === ЖИТЕЛИ (КАРТОЧКИ) === */
+        .inhabitants-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .character-card { text-align: center; padding: 30px; background: white; border-radius: 20px; border-bottom: 5px solid var(--ocean); box-shadow: 0 5px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .character-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid var(--sand); }
+        .character-card h3 { color: var(--ocean); margin-bottom: 10px; font-size: 1.4rem; }
+
+        /* === ИСТОРИЯ (ТАЙМЛАЙН) === */
+        .timeline { position: relative; max-width: 900px; margin: 0 auto; padding: 20px 0; }
+        .timeline::after { content: ''; position: absolute; width: 4px; background: rgba(9, 132, 227, 0.2); top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px; }
+        .timeline-item { padding: 20px 40px; position: relative; width: 50%; box-sizing: border-box; }
+        .timeline-item:nth-child(odd) { left: 0; }
+        .timeline-item:nth-child(even) { left: 50%; }
+        .timeline-dot { position: absolute; width: 24px; height: 24px; right: -12px; background-color: var(--jungle); border: 4px solid white; top: 30px; border-radius: 50%; z-index: 1; box-shadow: var(--glow); }
+        .timeline-item:nth-child(even) .timeline-dot { left: -12px; }
+        .timeline-content { padding: 30px; background-color: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s; position: relative; overflow: hidden; }
+        .timeline-content:hover { transform: scale(1.02); }
+        .timeline-date { display: inline-block; color: var(--sand); font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .timeline-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; }
+
+        /* === ПОДВАЛ === */
+        footer { background: var(--night); color: white; text-align: center; padding: 50px 20px; border-top: 5px solid var(--ocean); }
+        footer a { color: var(--sand); text-decoration: none; font-weight: bold; }
+
+        /* === АДАПТИВНОСТЬ === */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            nav { flex-direction: column; padding: 10px; }
+            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+            .nav-links a { margin: 0 10px; }
+            .about-grid { grid-template-columns: 1fr; }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 20px; }
+            .timeline-item:nth-child(even) { left: 0%; }
+            .timeline-item:nth-child(even) .timeline-dot, .timeline-item:nth-child(odd) .timeline-dot { left: 19px; right: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- НАВИГАЦИЯ -->
+    <nav>
+        <a href="#" class="logo-container">
+            <img src="1000027466.jpg" alt="Логотип" class="logo-img">
+            <span class="logo-text">Magic Pika</span>
+        </a>
+        <div class="nav-links">
+            <a href="#about">О нас</a>
+            <a href="#locations">Локации</a>
+            <a href="#inhabitants">Жители</a>
+            <a href="#history">Хроники</a>
+            <a href="https://t.me/Magikpika" target="_blank" class="btn-social">Telegram</a>
+        </div>
+    </nav>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <header class="hero">
+        <h1>Магия Реальна</h1>
+        <p>Где раскаленная пустыня встречается с океанской волной, светящимися пальмами и древними тайнами Аризоны.</p>
+        <button class="anthem-btn" onclick="new Audio('The Magic Pika.mp3').play()">
+    ▶ Слушать гимн Пляжа
+</button>
+    </header>
+
+    <!-- О НАС И ЛОКАЦИИ -->
+    <section id="about">
+        <h2 class="section-title">Место силы</h2>
+        <p class="section-subtitle">Это не курорт, не отель и не пляж в привычном смысле. Это живой организм.</p>
+        
+        <div class="about-grid">
+            <div>
+                <p class="about-text">
+                    <strong>Культурный мост:</strong> Несмотря на то, что мы находимся в сердце Аризоны, здесь говорят по-русски. Это придает проекту особый шарм и создает атмосферу уюта для каждого гостя. 
+                </p>
+                <p class="about-text">
+                    <strong>Школа Океанских Наук:</strong> У нас дети учат язык дельфинов, тайны биолюминесценции и ботанику джунглей. Знания здесь подаются под шум прибоя.
+                </p>
+                <p class="about-text">
+                    <strong>Философия:</strong> Магия не умирает — она ждёт, когда в неё снова поверят. Природа — не декорация, а наш равноправный партнер.
+                </p>
+            </div>
+            <div>
+                <!-- Живописное фото возрожденного пляжа с коттеджами -->
+                <img src="1000027475.jpg" alt="Возрождение пляжа" style="width:100%; border-radius:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+
+        <div class="locations-grid" id="locations">
+            <div class="loc-card">
+                <!-- Живописное фото замка -->
+                <img src="1000027473.jpg" alt="Замок">
+                <div class="loc-info">
+                    <h3>Секретный Замок</h3>
+                    <p>Древнее сооружение на скале. Его стены покрыты письменами, а под ним покоится храм «Царицы Приливов».</p>
+                </div>
+            </div>
+            <div class="loc-card">
+                <!-- Живописное фото лагуны -->
+                <img src="1000027469.jpg" alt="Лагуна">
+                <div class="loc-info">
+                    <h3>Светящаяся Лагуна</h3>
+                    <p>Дом Тралалелок. Тихая вода, где по ночам мерцает планктон, а на рассвете слышны мелодичные песни.</p>
+                </div>
+            </div>
+            <div class="loc-card">
+                <!-- Живописное подводное/скалистое фото -->
+                <img src="1000027474.jpg" alt="Южный Берег">
+                <div class="loc-info">
+                    <h3>Южный Берег</h3>
+                    <p>Тихая, скалистая территория Фёдора. Место для йоги, размышлений и уединения вдали от суеты.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЖИТЕЛИ И КОМАНДА -->
+    <section id="inhabitants" style="background-color: #f0fdfa;">
+        <h2 class="section-title" style="color: var(--jungle);">Душа Проекта</h2>
+        <p class="section-subtitle">Команда — это люди, которые остаются, когда уходит вода. А наши животные — настоящая семья.</p>
+        
+        <div class="inhabitants-grid">
+            <div class="character-card">
+                <!-- Арт Тралалелки -->
+                <img src="1000027465.jpg" alt="Тралалелка">
+                <h3>Тралалелки</h3>
+                <p>Маленькие акулы в синих кроссовках. Поют на рассвете, любят личи и прыгают на руки, как щенки.</p>
+            </div>
+            <!-- Карточки без фото (только красивый текст) -->
+            <div class="character-card" style="border-bottom: 5px solid var(--jungle);">
+                <h3 style="color: var(--jungle);">Люмин</h3>
+                <p>Уникальный детёныш Лиры. Светится мягким синим светом, а его трели напоминают звучание арфы.</p>
+            </div>
+            <div class="character-card">
+                <h3>Админ Роман</h3>
+                <p>Надёжный и вездесущий. Решает все бытовые проблемы. Если пляж работает как часы — это его заслуга.</p>
+            </div>
+            <div class="character-card" style="border-bottom: 5px solid #e17055;">
+                <h3 style="color: #e17055;">Кибер Тралалело</h3>
+                <p>Пугающий гость в кроссовках Nike, однажды загнавший всех обитателей лагуны по домам на двое суток.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 50px; background: white; padding: 30px; border-radius: 20px; border-left: 5px solid var(--ocean);">
+            <h3 style="color: var(--ocean); margin-bottom: 15px;">Хранители Пляжа</h3>
+            <p><strong>Создатель (CEO):</strong> Верит в магию, любит личи, кофе и закаты. Пережил все кризисы проекта.</p>
+            <p><strong>Гордон:</strong> Волонтёр и хранитель лагуны. Живёт на пляже, не носит телефон. Однажды выжил после нападения огромной многоножки.</p>
+            <p><strong>Фёдор (66 лет):</strong> Живая история. Йог южного берега. Курит, молчит, не признает смартфоны. Знает то, чего не знают другие.</p>
+        </div>
+    </section>
+
+    <!-- ИСТОРИЯ (ХРОНОЛОГИЯ) -->
+    <section id="history">
+        <h2 class="section-title">От первой волны до последнего луча</h2>
+        <p class="section-subtitle">Летопись взлётов, трагедий и великого возрождения Magic Pika.</p>
+
+        <div class="timeline">
+            <!-- 2015 -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--ocean);"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">2015 Год</span>
+                    <h3>Первые Тайны</h3>
+                    <p>Замок ещё не изучен, светящиеся ракушки только появляются на песке, а птицы с радужными крыльями прилетают лишь по ночам. Никто не знал, насколько волшебным станет это место.</p>
+                    <!-- Пейзаж с пальмами из оригинальных фото -->
+                    <img src="1000027467.jpg" alt="Пляж 2015" class="timeline-img">
+                </div>
+            </div>
+
+            <!-- Август 2025 -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--sand);"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">Август 2025</span>
+                    <h3>Землетрясение и Трагедия Solaris</h3>
+                    <p>9 августа страшное землетрясение разрушает инфраструктуру. Но самая большая боль приходит 17 августа — крушение лайнера «Solaris» уносит 2436 жизней. Пляж объявляет глубокий траур.</p>
+                    <!-- Живописное фото разрушенных зданий на пляже -->
+                    <img src="1000027470.jpg" alt="Разрушения" class="timeline-img">
+                </div>
+            </div>
+
+            <!-- Сентябрь 2025 (Концерт) -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: #8e44ad;"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">Сентябрь 2025</span>
+                    <h3>Trippie Redd и Юбилей</h3>
+                    <p>Масштабный фестиваль возвращает жизнь на берег. Сцена сияет неоном. В этом же месяце пляж отмечает своё 10-летие, презентует собственный гимн и открывает Школу Магии.</p>
+                    <!-- Фото неоновой сцены -->
+                    <img src="1000027471.jpg" alt="Сцена" class="timeline-img">
+                </div>
+            </div>
+
+            <!-- Сентябрь 2025 (Память) -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--night);"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">11 Сентября 2025</span>
+                    <h3>День Памяти</h3>
+                    <p>Пляж погружается в тишину. В память о жертвах трагедии 2001 года на берегу океана зажжены 2977 свечей — по одной за каждую унесенную жизнь. Свет сливается с ночным морем.</p>
+                    <!-- Фото со свечами -->
+                    <img src="1000027472.jpg" alt="Свечи" class="timeline-img">
+                </div>
+            </div>
+
+            <!-- Октябрь 2025 (Без фото) -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--ocean);"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">Октябрь 2025</span>
+                    <h3>Царица Приливов</h3>
+                    <p>Археологическая сенсация! В 100 метрах от прибоя найден подземный храм. Главная находка — саркофаг из горного хрусталя с останками жрицы в жемчужных одеждах. Скоро здесь появится подземный музей со стеклянным полом.</p>
+                </div>
+            </div>
+
+            <!-- Ноябрь 2025 (Без фото) -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: #c0392b;"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">Ноябрь 2025</span>
+                    <h3>Прощание с Капитаном</h3>
+                    <p>Трагически погибает душа пляжа — старый морской волк капитан Марко. Он отдаёт жизнь, спасая стаю Тралалелок во время шторма. На мысе появляется мемориальная скамья с его девизом: «Magic Pika должен дарить свет, даже когда в душе шторм».</p>
+                </div>
+            </div>
+
+            <!-- Зима и Наши дни (Без фото) -->
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--jungle);"></div>
+                <div class="timeline-content">
+                    <span class="timeline-date">Наши дни</span>
+                    <h3>Возрождение</h3>
+                    <p>После опасного новогоднего пожара от салютов, пляж переосмыслил правила и ввел «зеленые фейерверки». Экосистема восстанавливается, пальмы высажены заново. Магия продолжает жить, и она в надёжных руках.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <img src="1000027466.jpg" alt="Логотип подвала" style="width: 60px; border-radius: 50%; margin-bottom: 20px;">
+        <p>Администрация Magic Pika™ 2015-2026.</p>
+        <p>Можно построить заново всё, кроме души. Но если душа цела — стены поднимутся.</p>
+        <p style="margin-top: 20px;">
+            Следите за нами в <a href="https://t.me/Magikpika" target="_blank">Telegram</a>
+        </p>
+    </footer>
+
+</body>
+</html>
